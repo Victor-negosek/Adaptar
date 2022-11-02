@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - be-files:/images
+
+  frontend:
+    build: ./frontend
+    restart: always
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+      - be-files:/images
+    ports:
+      - 3000:3000
+  
+volumes:
+  wp-db:
+  be-files:
+    name: image_files
