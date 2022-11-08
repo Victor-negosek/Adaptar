@@ -17,7 +17,6 @@ class Auth(Resource):
     @api.doc('This is the API to get the component to a specific product and step')   
     @api.expect(auth_data)
     def post(self):
-        # install=os.popen("curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash")
         input_data = json.loads(request.data)
         userName = input_data["userName"]
         password = input_data["password"]
