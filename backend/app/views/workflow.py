@@ -10,6 +10,8 @@ api = Namespace('workflow', description="This is the API to handle with the work
 class Workflow(Resource):
     @api.doc('This is the API to get all the workflow of a specific product')   
     def get(self, productName):
+        # l = [{"name": "title", "image": "\Resources\cold.jpg", "description":"description", "id": "1"}]
+        # return jsonify(l)
         header = current_app.config.get("BASEHEADER")
         header["Authorization"] = request.headers.get('Authorization')
         query = {"query": "SELECT workflow FROM DIGITALTWINS product JOIN workflow RELATED product.control Relationship WHERE product.$dtId = '{}'".format(productName)}
@@ -21,7 +23,7 @@ class Workflow(Resource):
                 f"Problem with request {res.status_code}. Error code: {res.text} ")
         else:
             response = res.json()
-            l = [{"name": value["workflow"]["$dtId"], "image": value["workflow"]["image"], "description":value["workflow"]["description"], "id": value["workflow"]["$etag"]} for value in response["value"]]
+            l = [{"name": value["workflow"]["title"], "image": value["workflow"]["image"], "description":value["workflow"]["description"], "id": value["workflow"]["$dtId"]} for value in response["value"]]
 
             return jsonify(l)
 
@@ -30,6 +32,8 @@ class Workflow(Resource):
 class Worflow(Resource):
     @api.doc('This is the API to get a specific Workflow')   
     def get(self, workflowName):
+        # l = {"name": "title", "image": "\Resources\cold.jpg", "description":"description", "id": "1"}
+        # return l
         header = current_app.config.get("BASEHEADER")
         header["Authorization"] = request.headers.get('Authorization')
         query = {"query": "SELECT * FROM DIGITALTWINS WHERE $dtId = '{}'".format(workflowName)}
@@ -41,10 +45,10 @@ class Worflow(Resource):
         else:
             response = res.json()
             l = {
-                "name": response["value"][0]["$dtId"],
+                "name": response["value"][0]["title"],
                 "image": response["value"][0]["image"],
                 "description":response["value"][0]["description"],
-                "id": response["value"][0]["$etag"]
+                "id": response["value"][0]["$dtId"]
                 }
 
             return l

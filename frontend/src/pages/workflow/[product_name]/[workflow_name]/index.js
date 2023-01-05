@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import Header from "../../../../components/layout/Header";
 import { useRouter } from "next/router";
-import { Icon } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Basic from "../../../../components/layout/Basic";
 import Step from "../../../../components/layout/Step";
 import api from "../../../../services/api";
+import { Fab } from "@material-ui/core";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 export default function WorkFlowIndex() {
   const router = useRouter();
-  const { workflow_name } = router.query;
-  const { product_name } = router.query;
+  const { workflow_name, product_name } = router.query;
   const [workflow, setWorkflow] = useState({});
   const [render, setRender] = useState(1);
+  const [open, setOpen] = useState(false);
+
+  const url = `/workflow/${product_name}`;
 
   function getWorkflow() {
     return api.get(`/workflow/${workflow_name}`);
@@ -34,25 +36,23 @@ export default function WorkFlowIndex() {
   return (
     <main>
       <div style={{ height: "100vh", padding: "0 0 15px 0" }}>
-        <Header
-          title={workflow_name}
-          leftIcon={
-            <Icon
-              component={ArrowBackIosIcon}
-              color="action"
-              onClick={() =>
-                router.push("/workflow/" + product_name, undefined, {
-                  shallow: true,
-                })
-              }
-            />
-          }
-        />
+        <Header title={workflow_name} url={url} />
         {render === 0 && (
           <Basic image={workflow.image} description={workflow.description} />
         )}
       </div>
-      <Step workflow_name={workflow_name} product_name={product_name} />
+      <Fab
+        color="primary"
+        style={{ position: "fixed", bottom: "32px", right: "32px" }}
+      >
+        <PlayArrowIcon onClick={(e) => setOpen(true)} size="large" />
+      </Fab>
+      <Step
+        open={open}
+        setOpen={setOpen}
+        workflow_name={workflow_name}
+        product_name={product_name}
+      />
     </main>
   );
 }

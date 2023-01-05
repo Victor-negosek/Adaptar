@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { useAuth } from "../hooks/useAuth";
 import { makeStyles } from "@material-ui/core/styles";
+import Keyb from "../components/Keyb";
+import "react-simple-keyboard/build/css/index.css";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -18,14 +20,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-
   const { signIn } = useAuth();
-
   const [isLoginIn, setIsLoginIn] = useState(false);
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleSubmit(userName, password) {
+    setKeyboardVisibility(false);
     if (userName == "" || password == "") {
       alert("Please Fill all the fields");
     } else {
@@ -34,6 +35,24 @@ export default function Home() {
       setIsLoginIn(false);
     }
   }
+
+  const [keyboardVisibility, setKeyboardVisibility] = useState(false);
+
+  const [inputs, setInputs] = useState({});
+  const [inputName, setInputName] = useState("default");
+
+  function handleFocus(Name) {
+    setInputName(Name);
+    setKeyboardVisibility(true);
+  }
+
+  const onChangeInput = (event) => {
+    const inputVal = event.target.value;
+    setInputs({
+      ...inputs,
+      [inputName]: inputVal,
+    });
+  };
 
   return (
     <>
@@ -84,19 +103,23 @@ export default function Home() {
             WELCOME TO ADAPTAR
           </div>
           <TextField
-            label="Email"
-            name="email"
-            variant="outlined"
+            id="userName"
+            value={userName}
+            onFocus={() => handleFocus("userName")}
+            placeholder={"Email"}
+            onChange={onChangeInput}
             style={{ width: "80%" }}
-            onChange={(e) => setUsername(e.target.value)}
+            variant="outlined"
           />
           <TextField
-            label="Password"
-            name="password"
+            id="password"
+            value={password}
+            onFocus={() => handleFocus("password")}
+            placeholder={"Password"}
+            onChange={onChangeInput}
+            style={{ width: "80%" }}
             variant="outlined"
             type="password"
-            style={{ width: "80%" }}
-            onChange={(e) => setPassword(e.target.value)}
           />
           <Button
             color="primary"
@@ -108,6 +131,17 @@ export default function Home() {
             Login
           </Button>
         </div>
+        {keyboardVisibility && (
+          <Keyb
+            input={inputs}
+            setInput={setInputs}
+            inputName={inputName}
+            setUsername={setUsername}
+            setPassword={setPassword}
+            userName={userName}
+            setKeyboardVisibility={setKeyboardVisibility}
+          />
+        )}
         <div
           style={{
             marginTop: "auto",

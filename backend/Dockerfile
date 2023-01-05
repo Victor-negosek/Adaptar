@@ -9,6 +9,7 @@ COPY requirements.txt requirements.txt
 
 # Install packages from requirements.txt on docker container
 RUN pip3 install -r requirements.txt
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Add app file
 COPY . .

@@ -1,14 +1,18 @@
 import Button from "@material-ui/core/Button";
 import { useAuth } from "../../hooks/useAuth";
+import { Icon } from "@material-ui/core";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useRouter } from "next/router";
 
 export default function Header(props) {
+  const router = useRouter();
   const { logout } = useAuth();
 
   const handleLogout = () => {
     logout();
   };
 
-  const { leftIcon, rightIcon, title } = props;
+  const { url, title } = props;
   return (
     <div
       style={{
@@ -22,7 +26,20 @@ export default function Header(props) {
         boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.15)",
       }}
     >
-      <div style={{ height: "24px", width: "24px" }}>{leftIcon}</div>
+      <div style={{ height: "24px", width: "24px" }}>
+        {url && (
+          <Icon
+            component={ArrowBackIosIcon}
+            color="action"
+            onClick={() =>
+              router.push(url, undefined, {
+                shallow: true,
+              })
+            }
+          />
+        )}
+      </div>
+
       <div
         style={{
           fontSize: "18px",

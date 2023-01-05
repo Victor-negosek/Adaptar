@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Header from "../../../components/layout/Header";
 import { useRouter } from "next/router";
 import Card from "../../../components/Card";
-import { Icon } from "@material-ui/core";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import api from "../../../services/api";
 
 export default function WorkFlowList(props) {
@@ -34,20 +31,7 @@ export default function WorkFlowList(props) {
   return (
     <main>
       <div style={{ height: "100vh", padding: "0 0 15px 0" }}>
-        <Header
-          title="WORKFLOWS"
-          leftIcon={
-            <Icon
-              component={ArrowBackIosIcon}
-              color="action"
-              onClick={() =>
-                router.push("/product/", undefined, {
-                  shallow: true,
-                })
-              }
-            />
-          }
-        />
+        <Header title="WORKFLOWS" url="/machine/" />
         {render === 0 && (
           <div
             style={{ display: "flex", flexDirection: "column", width: "100%" }}
@@ -60,7 +44,7 @@ export default function WorkFlowList(props) {
                 description={workflow.description}
                 onClick={() =>
                   router.push(
-                    "/workflow/" + product_name + "/" + workflow.name,
+                    "/workflow/" + product_name + "/" + workflow.id,
                     undefined,
                     {
                       shallow: true,

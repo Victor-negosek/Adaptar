@@ -16,7 +16,7 @@ function AuthProvider({ children }) {
       }
     } else {
       if (router.pathname == "/") {
-        router.push("/product");
+        router.push("/machine");
       }
     }
   }, [children]);
@@ -34,7 +34,7 @@ function AuthProvider({ children }) {
         console.log(response.data);
         setCookie("accessToken", accessToken, 0.1);
         setCookie("isAuthenticated", true, 0.1);
-        router.push("/product", undefined, {
+        router.push("/machine", undefined, {
           shallow: true,
         });
       })

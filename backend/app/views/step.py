@@ -28,13 +28,13 @@ class Step(Resource):
                 }
             return jsonify(l)
 
-@api.route("/<workflowName>/<stepName>/<relationName>")
+@api.route("/<stepName>/<relationName>")
 class Step(Resource):
     @api.doc('This is the API to get the next step in a workflow')   
-    def get(self, workflowName, stepName, relationName):
+    def get(self, stepName, relationName):
         header = current_app.config.get("BASEHEADER")
         header["Authorization"] = request.headers.get('Authorization')
-        query = {"query": "SELECT value FROM DIGITALTWINS MATCH (step)-[r:{}]->(value)<-[contain]-(workflow) WHERE step.$dtId = '{}' AND workflow.$dtId = '{}'".format(relationName, stepName, workflowName)}
+        query = {"query": "SELECT value FROM DIGITALTWINS MATCH (step)-[r:{}]->(value) WHERE step.$dtId = '{}'".format(relationName, stepName)}
         res = requests.post(current_app.config.get("PATH"), json=query,
                             headers= header)
 
